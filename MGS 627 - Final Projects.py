@@ -76,7 +76,7 @@ app.layout = html.Div([
 
     # Footer (bottom center)
     html.Div([
-        html.I('Copyright © 2025 Zachary, Samuel, Meghana INC')
+        html.I('Copyright © 2025 Zachary, Samuel, Meghana INC.')
     ], style={
         'position': 'fixed',
         'bottom': '10px',
