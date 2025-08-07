@@ -12,3 +12,7 @@ response = requests.get(url2)
 data2 = response.json()
 print(data2)
 df2 = pd.DataFrame(data2)
+
+df3 = df2[df2['Position'] == 'QB'][['PassingYards', 'Name', 'Team', 'Position']]
+df3 = df3.sort_values(by='PassingYards', ascending=False).head(32)
+
