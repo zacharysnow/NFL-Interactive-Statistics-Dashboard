@@ -30,6 +30,16 @@ RB_df = RB_df.sort_values(by='RushingYards', ascending=False).head(32)
 #Widereceiver and receiving yards dataframe
 WR_df = df2[df2['Position'] == 'WR'][['ReceivingYards', 'Name', 'Team', 'Position']]
 WR_df = WR_df.sort_values(by='ReceivingYards', ascending=False).head(32)
+
+#Teams points per game dataframe
+df['PPG'] = (df['Score']/df['Games']).round(2)
+PPG_df = df[['Team', 'PPG']]
+PPG_df = PPG_df.sort_values(by='PPG', ascending=False)
+
+#Teams total touchdowns on the season or touchdowns per game dataframe?
+TD_df = df[['Team', 'Touchdowns']]
+TD_df = TD_df.sort_values(by='Touchdowns', ascending=False)
+
 >>>>>>> origin/main
 
 # NFL logo URL
