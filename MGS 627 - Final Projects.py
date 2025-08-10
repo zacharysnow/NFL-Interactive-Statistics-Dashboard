@@ -1,5 +1,6 @@
 import requests
 import pandas as pd
+import matplotlib.pyplot as plt
 
 #Team statistics dataframe
 url = 'https://api.sportsdata.io/v3/nfl/scores/json/TeamSeasonStats/{2024REG}?key=b3c141ba44fc4f1ab22d3200d4f8a48f'
@@ -14,7 +15,6 @@ response = requests.get(url2)
 data2 = response.json()
 print(data2)
 df2 = pd.DataFrame(data2)
-
 
 #Quarterback and passing yards dataframe
 QB_df = df2[df2['Position'] == 'QB'][['PassingYards', 'Name', 'Team', 'Position']]
@@ -33,13 +33,30 @@ df['PPG'] = (df['Score']/df['Games']).round(2)
 PPG_df = df[['Team', 'PPG']]
 PPG_df = PPG_df.sort_values(by='PPG', ascending=False)
 
-#Teams total touchdowns on the season or touchdowns per game dataframe?
-TD_df = df[['Team', 'Touchdowns']]
-TD_df = TD_df.sort_values(by='Touchdowns', ascending=False)
+#Teams points allowed per game dataframe
+df['PPG_allowed'] = (df['OpponentScore']/df['Games']).round(2)
+PPG_allowed_df = df[['Team', 'PPG_allowed']]
+PPG_allowed_df = PPG_allowed_df.sort_values(by='PPG_allowed', ascending=False)
 
-=======
->>>>>>> origin/main
-<<<<<<< HEAD
+#Teams turnover differential dataframe (higher turnover differential = better)
+#We can compare the correlation between points per game(PPG_df) and turnover differential
+df['Turnover_Differential'] = (df['Takeaways'] - df['Giveaways'])
+Turnover_Differential_df = df[['Team', 'Turnover_Differential']]
+Turnover_Differential_df = Turnover_Differential_df.sort_values(by='Turnover_Differential', ascending=False)
+
+#Scatter plot comparing ppg_df and ppg_allowed_df
+plt.figure(figsize=(8,6))
+plt.scatter(df['PPG_allowed'], df['PPG'], s=100)
+for i, row in df.iterrows():
+    plt.text(row['PPG_allowed']+0.2, row['PPG'], row['Team'], fontsize=10)
+
+plt.axhline(df['PPG'].mean(), color='gray', linestyle='--', linewidth=0.7)
+plt.axvline(df['PPG_allowed'].mean(), color='gray', linestyle='--', linewidth=0.7)
+plt.xlabel('Points Allowed per Game (PPG_allowed) - Lower is Better')
+plt.ylabel('Points per Game (PPG) - Higher is Better')
+plt.title('NFL Team Performance: PPG vs PPG_allowed (2024)')
+plt.show()
+
 import dash
 from dash import html
 
