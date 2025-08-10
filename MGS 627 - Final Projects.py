@@ -15,10 +15,7 @@ data2 = response.json()
 print(data2)
 df2 = pd.DataFrame(data2)
 
-<<<<<<< HEAD
-import dash
-from dash import html
-=======
+
 #Quarterback and passing yards dataframe
 QB_df = df2[df2['Position'] == 'QB'][['PassingYards', 'Name', 'Team', 'Position']]
 QB_df = QB_df.sort_values(by='PassingYards', ascending=False).head(32)
@@ -40,7 +37,11 @@ PPG_df = PPG_df.sort_values(by='PPG', ascending=False)
 TD_df = df[['Team', 'Touchdowns']]
 TD_df = TD_df.sort_values(by='Touchdowns', ascending=False)
 
+=======
 >>>>>>> origin/main
+<<<<<<< HEAD
+import dash
+from dash import html
 
 # NFL logo URL
 logo_url = 'https://www.clipartmax.com/png/middle/66-667753_nfl-logo-national-football-league-logo-png.png'
