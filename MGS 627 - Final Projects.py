@@ -1,7 +1,8 @@
 import requests
 import pandas as pd
 import matplotlib.pyplot as plt
-
+import plotly.express as px
+import seaborn as sns
 #Team statistics dataframe
 url = 'https://api.sportsdata.io/v3/nfl/scores/json/TeamSeasonStats/{2024REG}?key=b3c141ba44fc4f1ab22d3200d4f8a48f'
 response = requests.get(url)
@@ -44,6 +45,10 @@ df['Turnover_Differential'] = (df['Takeaways'] - df['Giveaways'])
 Turnover_Differential_df = df[['Team', 'Turnover_Differential']]
 Turnover_Differential_df = Turnover_Differential_df.sort_values(by='Turnover_Differential', ascending=False)
 
+Turnover_Differential_PPG_df = df[['Team', 'Turnover_Differential','PPG']].copy()
+print(df[['Turnover_Differential', 'PPG']].isnull().sum())
+print(df['Team'].value_counts())
+
 #Scatter plot comparing ppg_df and ppg_allowed_df
 plt.figure(figsize=(8,6))
 plt.scatter(df['PPG_allowed'], df['PPG'], s=100)
@@ -57,8 +62,23 @@ plt.ylabel('Points per Game (PPG) - Higher is Better')
 plt.title('NFL Team Performance: PPG vs PPG_allowed (2024)')
 plt.show()
 
+fig = px.scatter(df,
+                 x='Turnover_Differential',
+                 y='PPG',
+                 color='Team',
+                 trendline='ols',
+                 labels={'Turnover_Differential': 'Turnover Differential (Higher is Better)',
+                         'PPG': 'Points Per Game (PPG)'},
+                 hover_name='Team'
+                )
+fig2 = plt.figure()
+sns.regplot(x='Turnover_Differential', y='PPG', data=Turnover_Differential_PPG_df, ci=None)
+plt.title('Turnover Differential  vs PPG')
+plt.show()
+
 import dash
 from dash import html
+from dash import dcc
 
 # NFL logo URL
 logo_url = 'https://www.clipartmax.com/png/middle/66-667753_nfl-logo-national-football-league-logo-png.png'
@@ -92,6 +112,14 @@ app.layout = html.Div([
             })
         ], style={'width': '80%', 'display': 'inline-block'})
     ], style={'width': '100%', 'display': 'flex'}),
+    #the line graph
+    html.Div(
+        children=[
+            # Add a H3
+            html.H3('Relationship between Turnover Differential and Points Per Game (2024)'),
+            # Add  graph
+            dcc.Graph(id='turnover_diff_vs_ppg', figure=fig, style={'width':'500px', 'height':'350px', 'margin':'auto'})
+        ]),
 
     # Footer (bottom center)
     html.Div([
