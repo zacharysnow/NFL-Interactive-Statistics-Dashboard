@@ -58,10 +58,6 @@ WR_df = WR_df.sort_values(by='ReceivingYards', ascending=False).head(32)
 df['PPG'] = (df['Score'] / df['Games']).round(2)
 PPG_df = df[['Team', 'PPG']].sort_values(by='PPG', ascending=False)
 
-#Teams points allowed per game dataframe
-df['PPG_allowed'] = (df['OpponentScore'] / df['Games']).round(2)
-PPG_allowed_df = df[['Team', 'PPG_allowed']].sort_values(by='PPG_allowed', ascending=False)
-
 #Teams turnover differential dataframe (higher turnover differential = better)
 df['Turnover_Differential'] = (df['Takeaways'] - df['Giveaways'])
 Turnover_Differential_df = df[['Team', 'Turnover_Differential']].sort_values(by='Turnover_Differential',ascending=False)
