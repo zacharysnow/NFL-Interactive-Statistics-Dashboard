@@ -68,6 +68,19 @@ df['Turnover_Differential'] = (df['Takeaways'] - df['Giveaways'])
 Turnover_Differential_df = df[['Team', 'Turnover_Differential']].sort_values(by='Turnover_Differential',ascending=False)
 Turnover_Differential_PPG_df = df[['Team', 'Turnover_Differential', 'PPG']].copy()
 
+#Full team names dictionary
+team_names = {
+    "DET": "Detroit Lions (DET)", "BUF": "Buffalo Bills (BUF)",
+    "BAL": "Baltimore Ravens (BAL)",  "TB": "Tampa Bay Buccaneers (TB)", "WAS": "Washington Commanders (WAS)",
+    "CIN": "Cincinnati Bengals (CIN)",  "PHI": "Philadelphia Eagles (PHI)",
+    "GB": "Green Bay Packers (GB)","MIN": "Minnesota Vikings (MIN)", "DEN": "Denver Broncos (DEN)", "LAC": "Los Angeles Chargers (LAC)",
+    "ARI": "Arizona Cardinals (ARI)","SF": "San Francisco 49ers (SF)",  "ATL": "Atlanta Falcons (ATL)", "KC": "Kansas City Chiefs (KC)", "PIT": "Pittsburgh Steelers (PIT)",
+    "IND": "Indianapolis Colts (IND)", "SEA": "Seattle Seahawks (SEA)", "HOU": "Houston Texans (HOU)", "LAR": "Los Angeles Rams (LAR)",
+    "DAL": "Dallas Cowboys (DAL)", "MIA": "Miami Dolphins (MIA)", "CAR": "Carolina Panthers (CAR)",  "NO": "New Orleans Saints (NO)",
+    "NYJ": "New York Jets (NYJ)", "JAX": "Jacksonville Jaguars (JAX)", "TEN": "Tennessee Titans (TEN)",  "CHI": "Chicago Bears (CHI)",
+    "LV": "Las Vegas Raiders (LV)",  "NE": "New England Patriots (NE)", "NYG": "New York Giants (NYG)",  "CLE": "Cleveland Browns (CLE)"
+}
+
 #Scatter plot comparing ppg_df and ppg_allowed_df
 plt.figure(figsize=(8,6))
 plt.scatter(df['PPG_allowed'], df['PPG'], s=100)
@@ -209,6 +222,20 @@ app.layout = html.Div([
         ], style={'width': '33%', 'display': 'inline-block', 'text-align': 'center'}),
     ], style={'margin': '20px 0', 'backgroundColor': 'rgba(0,0,0,0.7)', 'padding': '15px', 'border-radius': '10px'}),
 
+        # ----- PPG Dropdown -----
+    html.Div([
+        html.H3("Select Team to See PPG",style={'color': 'white'}),
+        dcc.Dropdown(
+            id='ppg-selector',
+            options=[{'label': name, 'value': abbr} for abbr, name in team_names.items()],
+            value=None
+        ),
+        html.Div(
+            id='ppg-output',
+            style={'font-size': '24px', 'color': 'white', 'text-align': 'center', 'margin-top': '10px'}
+        )
+    ], style={'backgroundColor': 'rgba(0,0,0,0.7)', 'color': 'black', 'padding': '20px'}),
+
     # Dropdown + Main Graph
     html.Div([
         html.H3('Select Analysis View',
@@ -276,6 +303,16 @@ def update_main_graph(selected):
     elif selected == 'qbpass':
         return qb_pass_vs_ppg_fig
     return fig
+
+@app.callback(
+    dash.dependencies.Output('ppg-output', 'children'),
+    dash.dependencies.Input('ppg-selector', 'value')
+)
+def display_ppg(selected_team):
+    if selected_team:
+        ppg_value = PPG_df.loc[PPG_df['Team'] == selected_team, 'PPG'].values[0]
+        return f"{team_names[selected_team]}: {ppg_value} PPG"
+    return "Select a team to see PPG"
 
 # Running the app
 if __name__ == '__main__':
