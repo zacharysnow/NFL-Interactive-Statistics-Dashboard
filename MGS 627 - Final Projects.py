@@ -3,6 +3,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
 import seaborn as sns
+import dash
+from dash import html, dcc
+
+
 #Team statistics dataframe
 url = 'https://api.sportsdata.io/v3/nfl/scores/json/TeamSeasonStats/{2024REG}?key=b3c141ba44fc4f1ab22d3200d4f8a48f'
 response = requests.get(url)
@@ -76,9 +80,7 @@ sns.regplot(x='Turnover_Differential', y='PPG', data=Turnover_Differential_PPG_d
 plt.title('Turnover Differential  vs PPG')
 plt.show()
 
-import dash
-from dash import html
-from dash import dcc
+
 
 # NFL logo URL
 logo_url = 'https://www.clipartmax.com/png/middle/66-667753_nfl-logo-national-football-league-logo-png.png'
