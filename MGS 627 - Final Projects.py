@@ -309,6 +309,24 @@ def update_main_graph(selected):
     dash.dependencies.Input('ppg-selector', 'value')
 )
 def display_ppg(selected_team):
+    """
+    This function returns the points per game (PPG) for the selected NFL team.
+
+    Parameters :
+    selected_team : str
+        The abbreviation or key of the team selected from a dropdown.
+        Example: 'NE' for New England Patriots.
+
+    Returns :
+    str
+        A string displaying the full team name and its PPG in the format:
+        "{Team Name}: {PPG} PPG".
+        If no team is selected, returns "Select a team to see PPG".
+
+    Notes :
+    - Uses the PPG_df DataFrame to look up the PPG value.
+    - Uses the team_names dictionary to get the full team name.
+    """
     if selected_team:
         ppg_value = PPG_df.loc[PPG_df['Team'] == selected_team, 'PPG'].values[0]
         return f"{team_names[selected_team]}: {ppg_value} PPG"
