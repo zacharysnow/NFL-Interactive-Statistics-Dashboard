@@ -176,7 +176,7 @@ app.layout = html.Div([
                     'color': 'maroon',
                     'font-weight': 'bold',
                     'font-size': '50px',
-                    'margin': '0',
+                    'margin-right': '65px',
                     'padding-top': '15px',
                     'text-align': 'right'
                 }
