@@ -62,12 +62,6 @@ PPG_df = df[['Team', 'PPG']].sort_values(by='PPG', ascending=False)
 df['PPG_allowed'] = (df['OpponentScore'] / df['Games']).round(2)
 PPG_allowed_df = df[['Team', 'PPG_allowed']].sort_values(by='PPG_allowed', ascending=False)
 
-#Teams turnover differential dataframe (higher turnover differential = better)
-#We can compare the correlation between points per game(PPG_df) and turnover differential
-df['Turnover_Differential'] = (df['Takeaways'] - df['Giveaways'])
-Turnover_Differential_df = df[['Team', 'Turnover_Differential']].sort_values(by='Turnover_Differential',ascending=False)
-Turnover_Differential_PPG_df = df[['Team', 'Turnover_Differential', 'PPG']].copy()
-
 #Full team names dictionary
 team_names = {
     "DET": "Detroit Lions (DET)", "BUF": "Buffalo Bills (BUF)",
@@ -80,18 +74,6 @@ team_names = {
     "NYJ": "New York Jets (NYJ)", "JAX": "Jacksonville Jaguars (JAX)", "TEN": "Tennessee Titans (TEN)",  "CHI": "Chicago Bears (CHI)",
     "LV": "Las Vegas Raiders (LV)",  "NE": "New England Patriots (NE)", "NYG": "New York Giants (NYG)",  "CLE": "Cleveland Browns (CLE)"
 }
-
-#Scatter plot comparing ppg_df and ppg_allowed_df
-plt.figure(figsize=(8,6))
-plt.scatter(df['PPG_allowed'], df['PPG'], s=100)
-for i, row in df.iterrows():
-    plt.text(row['PPG_allowed']+0.2, row['PPG'], row['Team'], fontsize=10)
-
-plt.axhline(df['PPG'].mean(), color='gray', linestyle='--', linewidth=0.7)
-plt.axvline(df['PPG_allowed'].mean(), color='gray', linestyle='--', linewidth=0.7)
-plt.xlabel('Points Allowed per Game (PPG_allowed) - Lower is Better')
-plt.ylabel('Points per Game (PPG) - Higher is Better')
-plt.title('NFL Team Performance: PPG vs PPG_allowed (2024)')
 
 #Plotting a graph of turnoverdifferential(a team's takeaways minus their giveaways) vs the points per game
 fig = px.scatter(
