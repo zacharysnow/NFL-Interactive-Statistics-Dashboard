@@ -5,13 +5,14 @@ import plotly.express as px
 import dash
 from dash import html, dcc
 
+#Creating a dashboard for NFL Data season 2024 analysis by Zachary, Samuel and Meghana Summer 2025 batch
+
 
 def fetch_nfl_data(endpoint, season, api_key):
     """
-       Fetch NFL data from the SportsData.io API for a given endpoint and season.
+       This function is used to fetch NFL data from the SportsData.io API for a given endpoint and season.
 
-       Parameters
-       ----------
+       Parameters :
        endpoint : str
            The API endpoint path after 'nfl/' (e.g., 'scores/json/TeamSeasonStats').
        season : str
@@ -20,36 +21,26 @@ def fetch_nfl_data(endpoint, season, api_key):
        api_key : str
            Your SportsData.io API key for authentication.
 
-       Returns
-       -------
+       Returns :
        pandas.DataFrame
            A DataFrame containing the JSON response from the API.
 
        - The returned DataFrame will vary in structure depending on the endpoint requested.
        - See SportsData.io documentation for available endpoints and their fields.
+        https://sportsdata.io/developers/api-documentation/nfl
        """
 
     url = f"https://api.sportsdata.io/v3/nfl/{endpoint}/{{{season}}}?key={api_key}"
     response = requests.get(url)
     response.raise_for_status()
     return pd.DataFrame(response.json())
-
+#This is  our team's API key , used to fetch the NFL data from the SportsData.io APIs
 API_KEY ='b3c141ba44fc4f1ab22d3200d4f8a48f'
 #Team statistics dataframe
 df = fetch_nfl_data("scores/json/TeamSeasonStats", "2024REG", API_KEY)
 #Player statistics dataframe
 df2 = fetch_nfl_data("stats/json/PlayerSeasonStats", "2024REG", API_KEY)
-#Team statistics dataframe
-# url = 'https://api.sportsdata.io/v3/nfl/scores/json/TeamSeasonStats/{2024REG}?key=b3c141ba44fc4f1ab22d3200d4f8a48f'
-# response = requests.get(url)
-# data = response.json()
-# df = pd.DataFrame(data)
 
-#Player statistics dataframe
-# url2 = 'https://api.sportsdata.io/v3/nfl/stats/json/PlayerSeasonStats/{2024REG}?key=b3c141ba44fc4f1ab22d3200d4f8a48f'
-# response = requests.get(url2)
-# data2 = response.json()
-# df2 = pd.DataFrame(data2)
 
 #Quarterback and passing yards dataframe
 QB_df = df2[df2['Position'] == 'QB'][['PassingYards', 'Name', 'Team', 'Position']]
@@ -89,21 +80,31 @@ plt.xlabel('Points Allowed per Game (PPG_allowed) - Lower is Better')
 plt.ylabel('Points per Game (PPG) - Higher is Better')
 plt.title('NFL Team Performance: PPG vs PPG_allowed (2024)')
 
+#Plotting a graph of turnoverdifferential(a team's takeaways minus their giveaways) vs the points per game
 fig = px.scatter(
     df,
     x='Turnover_Differential',
     y='PPG',
-    color='Team',
     trendline='ols',
+    trendline_color_override='red',
     labels={'Turnover_Differential': 'Turnover Differential (Higher is Better)', 'PPG': 'Points Per Game (PPG)'},
     hover_name='Team',
     title='Turnover Differential vs Points Per Game (2024 Season)'
 )
+#setting properties of the regression line for the above graph, to visualize if there is a positive correlation
+#b/w turnover diff and the team's PPG
+fig.update_traces(selector=dict(mode='lines'), line=dict(width=4))
+fig.data = [trace for trace in fig.data if trace.mode != 'lines+markers']
 
+#Calculating the KPI values
+#average of points per game for the NFL teams
 kpi_avg_ppg = df['PPG'].mean()
+#The max avg of PPg
 kpi_max_ppg_team = PPG_df.iloc[0]
+#Finsing the best turn over differential
 kpi_best_turnover_team = Turnover_Differential_df.iloc[0]
 
+#a scatter plot for the graph to show Total passing yards vs total rushing yards across the season
 pass_rush_fig = px.scatter(
     df,
     x='PassingYards',
@@ -116,7 +117,7 @@ pass_rush_fig = px.scatter(
     title='Total Passing Yards vs Total Rushing Yards (2024 Season)',
     labels={'PassingYards': 'Total Passing Yards', 'RushingYards': 'Total Rushing Yards'}
 )
-
+#QB(Quarter Back) Passing Yards vs PPG
 team_qb_passing = QB_df.groupby('Team')['PassingYards'].sum().reset_index()
 team_qb_passing = team_qb_passing.merge(PPG_df, on='Team', how='left')
 
@@ -131,8 +132,9 @@ qb_pass_vs_ppg_fig = px.scatter(
     title='Total QB Passing Yards vs PPG (2024 Season)',
     labels={'PassingYards': 'Total QB Passing Yards', 'PPG': 'Points Per Game'}
 )
-
+#Rushing Touch Downs vs Passing Touch Downs
 rush_pass_td_df = df[['Team', 'RushingTouchdowns', 'PassingTouchdowns']].copy()
+#plotting a bar chart for Rushing TDs vs Passing TDs
 rush_pass_td_fig = px.bar(
     rush_pass_td_df.melt(id_vars='Team', value_vars=['RushingTouchdowns', 'PassingTouchdowns'],
                          var_name='TD Type', value_name='Touchdowns'),
@@ -154,6 +156,7 @@ for g in [fig, pass_rush_fig, qb_pass_vs_ppg_fig, rush_pass_td_fig]:
 
 # NFL logo URL
 logo_url = 'https://www.clipartmax.com/png/middle/66-667753_nfl-logo-national-football-league-logo-png.png'
+#Background Image URL
 background_url = 'https://static.clubs.nfl.com/image/private/t_new_photo_album_2x/f_auto/bills/xqkzseuxtexhhjk1jfkd.jpg'
 
 # Initialize Dash app
@@ -161,7 +164,7 @@ app = dash.Dash(__name__)
 
 # App layout
 app.layout = html.Div([
-    # Header
+    # Adding the NFL Logo on the top LHS of the dashboard
     html.Div([
         html.Div([
             html.Img(
@@ -169,7 +172,7 @@ app.layout = html.Div([
                 style={'width': '125px', 'display': 'inline-block', 'vertical-align': 'middle'}
             )
         ], style={'width': '20%', 'display': 'inline-block', 'text-align': 'left'}),
-
+        #DashBoard Heading
         html.Div([
             html.H1(
                 '2024 Analysis',
@@ -184,7 +187,7 @@ app.layout = html.Div([
             )
         ], style={'width': '80%', 'display': 'inline-block', 'text-align': 'right'})
     ], style={'width': '100%', 'display': 'flex', 'align-items': 'center'}),
-
+    #Heading for the KeyPI Section
     html.H2("Key Performance Indicators", style={'text-align': 'center', 'color': 'white',
                                                  'backgroundColor': 'rgba(0,0,0,0.7)', 'padding': '10px'}),
 
@@ -248,6 +251,24 @@ app.layout = html.Div([
     [dash.dependencies.Input('graph-selector', 'value')]
 )
 def update_main_graph(selected):
+    """
+    This function updates the main graph in the dashboard based on the selected dropdown option.
+
+    Parameters :
+    selected : str
+        The value chosen from the 'graph-selector' dropdown. Expected values:
+        - 'turnover': Displays the Turnover Differential vs Points Per Game (with regression line).
+        - 'passrush': Displays Passing Yards vs Rushing Yards for all teams.
+        - 'qbpass'  : Displays QB Passing Yards vs Points Per Game.
+
+    Returns :
+
+        A Plotly figure corresponding to the selected graph.
+
+
+    - If the input does not match one of the expected values, the default figure shown will be the turnover figure.
+
+    """
     if selected == 'turnover':
         return fig
     elif selected == 'passrush':
@@ -256,6 +277,6 @@ def update_main_graph(selected):
         return qb_pass_vs_ppg_fig
     return fig
 
-
+# Running the app
 if __name__ == '__main__':
     app.run(debug=False)
