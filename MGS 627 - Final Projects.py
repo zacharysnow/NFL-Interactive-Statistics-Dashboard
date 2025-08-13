@@ -28,8 +28,10 @@ def fetch_nfl_data(endpoint, season, api_key):
        - The returned DataFrame will vary in structure depending on the endpoint requested.
        - See SportsData.io documentation for available endpoints and their fields.
        """
-    url = f"https://api.sportsdata.io/v3/nfl/{endpoint}/{season}?key={api_key}"
+
+    url = f"https://api.sportsdata.io/v3/nfl/{endpoint}/{{{season}}}?key={api_key}"
     response = requests.get(url)
+    response.raise_for_status()
     return pd.DataFrame(response.json())
 
 API_KEY ='b3c141ba44fc4f1ab22d3200d4f8a48f'
