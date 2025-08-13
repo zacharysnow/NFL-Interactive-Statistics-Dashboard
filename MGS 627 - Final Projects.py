@@ -86,7 +86,6 @@ plt.axvline(df['PPG_allowed'].mean(), color='gray', linestyle='--', linewidth=0.
 plt.xlabel('Points Allowed per Game (PPG_allowed) - Lower is Better')
 plt.ylabel('Points per Game (PPG) - Higher is Better')
 plt.title('NFL Team Performance: PPG vs PPG_allowed (2024)')
-plt.show()
 
 fig = px.scatter(
     df,
