@@ -109,6 +109,7 @@ pass_rush_fig = px.scatter(
     x='PassingYards',
     y='RushingYards',
     color='Team',
+    text='Team',
     size='PPG',
     hover_name='Team',
     trendline='ols',
