@@ -62,6 +62,11 @@ PPG_df = df[['Team', 'PPG']].sort_values(by='PPG', ascending=False)
 df['PPG_allowed'] = (df['OpponentScore'] / df['Games']).round(2)
 PPG_allowed_df = df[['Team', 'PPG_allowed']].sort_values(by='PPG_allowed', ascending=False)
 
+#Teams turnover differential dataframe (higher turnover differential = better)
+df['Turnover_Differential'] = (df['Takeaways'] - df['Giveaways'])
+Turnover_Differential_df = df[['Team', 'Turnover_Differential']].sort_values(by='Turnover_Differential',ascending=False)
+Turnover_Differential_PPG_df = df[['Team', 'Turnover_Differential', 'PPG']].copy()
+
 #Full team names dictionary
 team_names = {
     "DET": "Detroit Lions (DET)", "BUF": "Buffalo Bills (BUF)",
