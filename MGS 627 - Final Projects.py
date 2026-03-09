@@ -35,7 +35,7 @@ def fetch_nfl_data(endpoint, season, api_key):
     response.raise_for_status()
     return pd.DataFrame(response.json())
 #This is  our team's API key , used to fetch the NFL data from the SportsData.io APIs
-API_KEY ='b3c141ba44fc4f1ab22d3200d4f8a48f'
+API_KEY ='YOUR_API_KEY_HERE'
 #Team statistics dataframe
 df = fetch_nfl_data("scores/json/TeamSeasonStats", "2025REG", API_KEY)
 #Player statistics dataframe
