@@ -5,7 +5,7 @@ import plotly.express as px
 import dash
 from dash import html, dcc
 
-#Creating a dashboard for NFL Data season 2024 analysis by Zachary, Samuel and Meghana Summer 2025 batch
+#Creating a dashboard for NFL Data season 2025 analysis by Zachary, Samuel and Meghana Summer 2025 batch
 
 
 def fetch_nfl_data(endpoint, season, api_key):
@@ -16,8 +16,8 @@ def fetch_nfl_data(endpoint, season, api_key):
        endpoint : str
            The API endpoint path after 'nfl/' (e.g., 'scores/json/TeamSeasonStats').
        season : str
-           The season code to request, in the format '2024REG', '2024PRE', or '2024POST'
-           (e.g., '2024REG' for 2024 regular season).
+           The season code to request, in the format '2025REG', '2025PRE', or '2025POST'
+           (e.g., '2025REG' for 2025 regular season).
        api_key : str
            Your SportsData.io API key for authentication.
 
@@ -37,9 +37,9 @@ def fetch_nfl_data(endpoint, season, api_key):
 #This is  our team's API key , used to fetch the NFL data from the SportsData.io APIs
 API_KEY ='b3c141ba44fc4f1ab22d3200d4f8a48f'
 #Team statistics dataframe
-df = fetch_nfl_data("scores/json/TeamSeasonStats", "2024REG", API_KEY)
+df = fetch_nfl_data("scores/json/TeamSeasonStats", "2025REG", API_KEY)
 #Player statistics dataframe
-df2 = fetch_nfl_data("stats/json/PlayerSeasonStats", "2024REG", API_KEY)
+df2 = fetch_nfl_data("stats/json/PlayerSeasonStats", "2025REG", API_KEY)
 
 
 #Quarterback and passing yards dataframe
@@ -85,7 +85,7 @@ fig = px.scatter(
     trendline_color_override='red',
     labels={'Turnover_Differential': 'Turnover Differential (Higher is Better)', 'PPG': 'Points Per Game (PPG)'},
     hover_name='Team',
-    title='Turnover Differential vs Points Per Game (2024 Season)'
+    title='Turnover Differential vs Points Per Game (2025 Season)'
 )
 #setting properties of the regression line for the above graph, to visualize if there is a positive correlation
 #b/w turnover diff and the team's PPG
@@ -110,7 +110,7 @@ pass_rush_fig = px.scatter(
     size='PPG',
     hover_name='Team',
     trendline='ols',
-    title='Total Passing Yards vs Total Rushing Yards (2024 Season)',
+    title='Total Passing Yards vs Total Rushing Yards (2025 Season)',
     labels={'PassingYards': 'Total Passing Yards', 'RushingYards': 'Total Rushing Yards'}
 )
 #QB(Quarter Back) Passing Yards vs PPG
@@ -125,7 +125,7 @@ qb_pass_vs_ppg_fig = px.scatter(
     size='PPG',
     color='Team',
     trendline='ols',
-    title='Total QB Passing Yards vs PPG (2024 Season)',
+    title='Total QB Passing Yards vs PPG (2025 Season)',
     labels={'PassingYards': 'Total QB Passing Yards', 'PPG': 'Points Per Game'}
 )
 #Rushing Touch Downs vs Passing Touch Downs
@@ -138,7 +138,7 @@ rush_pass_td_fig = px.bar(
     y='Touchdowns',
     color='TD Type',
     barmode='group',
-    title='Total Rushing Touchdowns vs Passing Touchdowns (2024 Season)'
+    title='Total Rushing Touchdowns vs Passing Touchdowns (2025 Season)'
 )
 
 # Make all graphs semi-transparent black background
@@ -171,7 +171,7 @@ app.layout = html.Div([
         #DashBoard Heading
         html.Div([
             html.H1(
-                '2024 Analysis',
+                '2025 Analysis',
                 style={
                     'color': 'maroon',
                     'font-weight': 'bold',
