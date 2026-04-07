@@ -4,11 +4,11 @@ An interactive dashboard built with Python and Dash analyzing NFL 2025 regular s
 Created by Zachary Snow, Samuel Ainsah-Mensah, and Meghana — MGS 627 Final Project.
 
 ## Dashboard Preview
-![Dashboard Preview 1](dashboard_preview1.png)
-![Dashboard Preview 2](dashboard_preview2.png)
-![Dashboard Preview 3](dashboard_preview3.png)
-![Dashboard Preview 4](dashboard_preview4.png)
-![Dashboard Preview 5](dashboard_preview5.png)
+![Dashboard Preview 1](images/dashboard_preview1.png)
+![Dashboard Preview 2](images/dashboard_preview2.png)
+![Dashboard Preview 3](images/dashboard_preview3.png)
+![Dashboard Preview 4](images/dashboard_preview4.png)
+![Dashboard Preview 5](images/dashboard_preview5.png)
 
 ## Overview
 This project fetches live NFL data from the SportsData.io API and visualizes key team and 
